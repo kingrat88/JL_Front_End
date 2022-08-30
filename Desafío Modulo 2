@@ -1,0 +1,46 @@
+<section class="mainbody">
+<main>
+  <h1>Bienvenidos a esta página web</h1>
+  <p>Maqueta Principal</p>
+  <p><a href="#">Tratando de programar</a>, no sé si lo lograré...</p>
+</main>
+
+<aside>
+  <img src="http://lorempixel.com/300/200/animals/1/">
+  <img src="http://lorempixel.com/300/200/animals/2/">
+</aside>
+</section>
+
+
+
+<body>
+  <div class="container">
+   Este es la prueba de la maqueta de mi pagina web.
+  </div>
+  </body>
+<footer>
+<div class="footer-block">
+  <a href="#">Aquí va a ir un enlace de pie de pagina</a>
+  
+</div>
+<div class="footer-block">
+  <a href="#">Otro enlace 4</a>
+  <a href="#">Otro enlace 5</a>
+
+</div>
+<div class="footer-block">
+  <a href="#">Más en footer 7</a>
+  <a href="#">Más en footer 8</a>
+  
+</div>
+</footer>
+
+<div class="alert alert-primary" role="alert">
+
+  Aún me cuesta añadir las alertas
+
+</div>
+
+<button type="button" class="btn btn-primary">Primary</button>
+
+<button type="button" class="btn btn-secondary">Secondary</button>
