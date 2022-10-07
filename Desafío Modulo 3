@@ -1,0 +1,182 @@
+Creación del servicio
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+
+import { AppComponent } from './app.component';
+import { HomeComponent } from './components/home/home.component';
+import { AboutComponent } from './components/about/about.component';
+import { NavbarComponent } from './components/shared/navbar/navbar.component';
+import { RouterModule } from '@angular/router';
+import { ROUTES } from './app.routes';
+import { EmployeesService } from './services/employees.service'; 
+
+@NgModule({
+  declarations: [AppComponent, HomeComponent, AboutComponent, NavbarComponent],
+  imports: [BrowserModule, RouterModule.forRoot(ROUTES, { useHash: true })],
+  providers: [EmployeesService], 
+  bootstrap: [AppComponent],
+})
+export class AppModule {}
+Implementación del servicio
+import { Injectable } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class EmployeesService {
+  employees: any[] = [ 
+    {
+      id: 0,
+      isActive: false,
+      age: 39,
+      name: {
+        first: 'Patsy',
+        last: 'Moore',
+      },
+      company: 'ZYTREX',
+      email: 'patsy.moore@zytrex.net',
+      favoriteFruit: 'strawberry',
+    },
+    {
+      id: 1,
+      isActive: true,
+      age: 37,
+      name: {
+        first: 'Valencia',
+        last: 'Flores',
+      },
+      company: 'AQUAMATE',
+      email: 'valencia.flores@aquamate.us',
+      favoriteFruit: 'banana',
+    },
+    {
+      id: 2,
+      isActive: false,
+      age: 37,
+      name: {
+        first: 'Leona',
+        last: 'Wyatt',
+      },
+      company: 'SENMAO',
+      email: 'leona.wyatt@senmao.io',
+      favoriteFruit: 'apple',
+    },
+  ];
+  constructor() {}
+
+  getEmployees() { 
+    return this.employees;
+  }
+
+  getEmployee(id: number) { 
+    return this.employees[id];
+  }
+}
+ng g c components/employees
+...
+  { path: 'employees', component: EmployeesComponent },
+...
+Actualización de la barra de menú
+...
+    <ul class="navbar-nav">
+      <li class="nav-item" routerLinkActive="active">
+        <a class="nav-link" routerLink="home">Home</a>
+      </li>
+      <li class="nav-item" routerLinkActive="active"> 
+        <a class="nav-link" routerLink="employees">Employees</a> 
+      </li>
+      <li class="nav-item" routerLinkActive="active">
+        <a class="nav-link" routerLink="about">About</a>
+      </li>
+    </ul>
+...
+Implementación del controlador de la parte maestra
+import { Component, OnInit } from '@angular/core';
+import { EmployeesService } from '../../services/employees.service';
+
+@Component({
+  selector: 'app-employees',
+  templateUrl: './employees.component.html',
+  styleUrls: ['./employees.component.css'],
+})
+export class EmployeesComponent implements OnInit {
+  employees: any[] = []; 
+
+  constructor(private employeesService: EmployeesService) { 
+    this.employees = employeesService.getEmployees(); 
+  }
+
+  ngOnInit(): void {}
+}
+Crear la vista de la parte maestra
+<div class="row">
+  <div class="col">
+    <ul>
+      <li *ngFor="let employee of employees"> 
+        {{ employee.name.first }} {{ employee.name.last }} 
+      </li>
+    </ul>
+  </div>
+</div>
+ng generate component components/employee
+Añadir al controlador maestro el acceso al detalle
+...
+export class EmployeesComponent implements OnInit {
+  employees: any[] = [];
+
+  constructor(
+    private employeesService: EmployeesService,
+    private router: Router 
+  ) {
+    this.employees = employeesService.getEmployees();
+  }
+
+  showEmployee(id: number) { 
+    this.router.navigate(['employee', id]); 
+  }
+
+  ngOnInit(): void {}
+}
+Añadir a la vista del maestro el acceso al detalle
+<div class="row">
+  <div class="col">
+    <ul>
+      <li *ngFor="let employee of employees">
+        <a routerLink="" (click)="showEmployee(employee.id)"> 
+          {{ employee.name.first }} {{ employee.name.last }}
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+Creación del servicio
+ng generate service services/posts
+providers: [EmployeesService, PostsService],
+Implementación del servicio
+  imports: [
+    BrowserModule,
+    RouterModule.forRoot(ROUTES, { useHash: true }),
+    HttpClientModule,
+  ],
+  import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class PostsService {
+  constructor(private http: HttpClient) {} 
+
+  getQuery(query: string) { 
+    const url = `https://jsonplaceholder.typicode.com/${query}`;
+    return this.http.get(url);
+  }
+
+  getPosts() { 
+    return this.getQuery('posts');
+  }
+
+  getComments(id: string) { 
+    return this.getQuery(`posts/${id}/comments`);
+  }
+}
